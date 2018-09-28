@@ -52,7 +52,19 @@ x := make(map[int]float64)
 predictLabel := model.Predict(x)    // Predicts a float64 label given the test vector 
 ```   
     
+### Another way to load model
+
+```go
+import "github.com/ewalker544/libsvm-go"
     
+// Create a model object from the model file generated from training
+model := libSvm.NewModelFromFileStream([]byte(""))  
+    
+x := make(map[int]float64)
+// Populate x with the test vector
+    
+predictLabel := model.Predict(x)    // Predicts a float64 label given the test vector 
+```   
 
 [1]: http://www.csie.ntu.edu.tw/~cjlin/libsvm/
     
