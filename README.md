@@ -59,8 +59,9 @@ predictLabel := model.Predict(x)    // Predicts a float64 label given the test v
 ```go
 import "github.com/CyrusF/libsvm-go"
     
-// Create a model object from the model file generated from training
-model := libSvm.NewModelFromFileStream([]byte(""))  
+// Create a model object from the io.Reader or byte slice generated from training
+byteReader := bytes.NewReader([]byte(""))
+model := libSvm.NewModelFromFileStream(byteReader)  
     
 x := make(map[int]float64)
 // Populate x with the test vector
