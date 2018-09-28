@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"io"
 )
 
 type Model struct {
