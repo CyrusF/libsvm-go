@@ -24,6 +24,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"io"
 )
 
 func (model *Model) Dump(file string) error {
