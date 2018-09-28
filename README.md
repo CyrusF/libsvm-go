@@ -5,9 +5,11 @@ This is a full port of LIBSVM in the Go programming language.  [LIBSVM][1] is a 
 
 This port has no external package dependencies, and uses only the native standard library.
 
+It was based on [ewalker544's project](github.com/ewalker544/libsvm-go), and this one was added a new funtion of load model from a byte slice. It is useful to build project into a single binary file.
+
 ## Installation
 
-    go get github.com/ewalker544/libsvm-go
+    go get github.com/CyrusF/libsvm-go
     make
 
 ## Compatibility Notes 
@@ -24,7 +26,7 @@ For full documentation of the <code>svm-train</code> and <code>svm-predict</code
 
 ### Training
 ```go
-import "github.com/ewalker544/libsvm-go"
+import "github.com/CyrusF/libsvm-go"
     
 param := libSvm.NewParameter()      // Create a parameter object with default values
 param.KernelType = libSvm.POLY      // Use the polynomial kernel
@@ -41,7 +43,7 @@ model.Dump("a9a.model")             // Dump the model into a user-specified file
     
 ### Predicting
 ```go
-import "github.com/ewalker544/libsvm-go"
+import "github.com/CyrusF/libsvm-go"
     
 // Create a model object from the model file generated from training
 model := libSvm.NewModelFromFile("a9a.model")  
@@ -55,7 +57,7 @@ predictLabel := model.Predict(x)    // Predicts a float64 label given the test v
 ### Another way to load model
 
 ```go
-import "github.com/ewalker544/libsvm-go"
+import "github.com/CyrusF/libsvm-go"
     
 // Create a model object from the model file generated from training
 model := libSvm.NewModelFromFileStream([]byte(""))  
