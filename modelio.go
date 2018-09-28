@@ -340,3 +340,63 @@ func (model *Model) ReadModel(file string) error {
 
 	return nil
 }
+
+func (model *Model) ReadModelStream(f io.Reader) error {
+	reader := bufio.NewReader(f)
+
+	if err := model.readHeader(reader); err != nil {
+		return err
+	}
+
+	var l int = model.l           // read l from header
+	var m int = model.nrClass - 1 // read nrClass from header
+	model.svCoef = make([][]float64, m)
+	for i := 0; i < m; i++ {
+		model.svCoef[i] = make([]float64, l)
+	}
+
+	model.sV = make([]int, l)
+	var i int = 0
+	for {
+		line, err := readline(reader) // read a line
+		if err != nil {
+			break
+		}
+
+		tokens := strings.Fields(line) // get all the word tokens (seperated by white spaces)
+		if len(tokens) < 2 {           // there should be at least 2 fields -- label + SV
+			continue
+		}
+		if i >= l {
+			return fmt.Errorf("Error in reading support vectors.  i=%d and l=%d\n", i, l)
+		}
+
+		model.sV[i] = len(model.svSpace) // starting index into svSpace for this SV
+
+		var k int = 0
+		for _, token := range tokens {
+			if k < m {
+				model.svCoef[k][i], err = strconv.ParseFloat(token, 64)
+				k++
+			} else {
+				node := strings.Split(token, ":")
+				if len(node) < 2 {
+					return fmt.Errorf("Fail to parse svSpace from token %v\n", token)
+				}
+				var index int
+				var value float64
+				if index, err = strconv.Atoi(node[0]); err != nil {
+					return fmt.Errorf("Fail to parse index from token %v\n", token)
+				}
+				if value, err = strconv.ParseFloat(node[1], 64); err != nil {
+					return fmt.Errorf("Fail to parse value from token %v\n", token)
+				}
+				model.svSpace = append(model.svSpace, snode{index: index, value: value})
+			}
+		}
+		model.svSpace = append(model.svSpace, snode{index: -1})
+		i++
+	}
+
+	return nil
+}
