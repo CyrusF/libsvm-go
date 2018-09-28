@@ -50,6 +50,13 @@ func NewModelFromFile(file string) *Model {
 	return model
 }
 
+func NewModelFromFileStream(f io.Reader) *Model {
+	param := NewParameter()
+	model := NewModel(param)
+	model.ReadModelStream(f)
+	return model
+}
+
 func (model Model) NrClass() int {
 	return model.nrClass
 }
